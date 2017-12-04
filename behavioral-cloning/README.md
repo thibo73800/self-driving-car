@@ -2,15 +2,9 @@
 
 [![Udacity - Self-Driving Car NanoDegree](https://s3.amazonaws.com/udacity-sdc/github/shield-carnd.svg)](http://www.udacity.com/drive)
 
-# **Behavioral Cloning**
-
-## Writeup Template
-
 ---
 
-**Behavioral Cloning Project**
-
-#### 1. Submission includes all required files and can be used to run the simulator in autonomous mode
+This repository contains starting files for the Behavioral Cloning Project from Udacity.
 
 My project includes the following files:
 * model.py containing the script to create and train the model
@@ -18,7 +12,7 @@ My project includes the following files:
 * model.h5 containing a trained convolution neural network
 * writeup_report.md or writeup_report.pdf summarizing the results
 
-#### 2. Test the model
+#### Test the model
 
 1) <b>!! Download the pre-trained model:</b> https://jumpshare.com/v/7lnxpaJDY0IU9BVAyZCv
 
@@ -32,7 +26,7 @@ python drive.py model.h5
 
 Then you can launch the Udacity provided simulator.
 
-#### 3. Submission code is usable and readable
+#### Model.py
 
 The model.py is composed of 4 functions:
     <ul>
@@ -47,35 +41,11 @@ Train the model:
 python model.py
 ```
 
-### Model Architecture and Training Strategy
+## Model Architecture and Training Strategy
 
-#### 1. An appropriate model architecture has been employed
+I train the model using a convolutional neural network predicting one linear output. As I said above, the architecture is built in the buld_method (model.py) method. In order to reduce the overfitting, I used data augmentation by flipping each image of the dataset and by using the left/right camera. I also add dropout just after the last convolution and after the first Fully connected layer. The model used an Adam optimizer, so the learning rate was not tuned manually. Then, for the architecture, the size and the number of filters have been set by many trial and error. For the training data, I used a combination of the central, left and right camera, each one, randomly flip. The training data is a subset of 85% of the total dataset.
 
-I train the model using a convolutional neural network predicting one linear output. As I said above, the architecture is built in the buld_method (model.py) method.
-
-#### 2. Attempts to reduce overfitting in the model
-
-In order to reduce the overfitting, I used data augmentation by flipping each image of the dataset and by using the left/right camera. I also add dropout just after the last convolution and after the first Fully connected layer.
-
-#### 3. Model parameter tuning
-
-The model used an Adam optimizer, so the learning rate was not tuned manually. Then, for the architecture, the size and the number of filters have been set by many trial and error.
-
-#### 4. Appropriate training data
-
-For the training data, I used a combination of the central, left and right camera, each one, randomly flip. The training data is a subset of 85% of the total dataset.
-
-### Model Architecture and Training Strategy
-
-#### 1. Solution Design Approach
-
-The overall strategy for deriving a model architecture was by trial and errors. I first try to use the model provided by NVIDIA, but I stayed stuck to bad results. This was certainly due to some bad implementations in the processing of the dataset. After refactoring my code and modifier the architecture by another one, I've started to get some better outcoms.
-
-I think, the problem was not really located into the NVIDIA model, but more on the processing of the dataset on my side. This is the reason why I do not use the model from NVIDIA but another.
-
-Since it was the first time I used Keras I had trouble training this model. I think the main error I did, was to not be enough patient before to test the model on the simulator. I thought the architecture was bad whereas it just needed more time to be trained properly.
-
-#### 2. Final Model Architecture
+## Final Model Architecture
 
 The architecture is the following:
 <ul>
@@ -89,7 +59,7 @@ The architecture is the following:
     <li>Fully conected: 1 (Linear output)</li>
 </ul>
 
-#### 3. Creation of the Training Set & Training Process
+## Creation of the Training Set & Training Process
 
 In the get_data method, I start to shuffle the dataset. Then, I go through each row where I randomly pick the center, left or right image. Then, I randomly choose to flip the image or not. If the image is flipped I multiply the angle by -1. Each time a new batch is ready, I return it using yield (Generator).
 
