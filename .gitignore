@@ -3,6 +3,10 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+behavioral-cloning/video/*
+behavioral-cloning/data/*
+
+
 # C extensions
 *.so
 
