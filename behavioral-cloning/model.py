@@ -70,9 +70,6 @@ def get_data(log_content, index_list, batch_size, strict=True):
             img = cv2.imread(os.path.join(DATA_IMG, log_content[index][i]).replace(" ", ""))
             if img is None: continue
 
-
-            plot_image(img)
-
             # Get the rotation
             rotation = float(log_content[index][3])
 
@@ -112,19 +109,14 @@ def main():
 
     BATCH_SIZE = 64
 
-    for data in get_data(content, train_index, BATCH_SIZE, strict=False):
-        pass
+    model.fit_generator(
+        generator=get_data(content, train_index, BATCH_SIZE, strict=False),
+        steps_per_epoch=len(train_index) / BATCH_SIZE * 50,
+        validation_data=get_data(content, valid_index, BATCH_SIZE, strict=True),
+        validation_steps=len(valid_index) / BATCH_SIZE,
+        nb_epoch=12)
 
-    for e in range(10000):
-        model.fit_generator(
-            generator=get_data(content, train_index, BATCH_SIZE, strict=False),
-            steps_per_epoch=len(train_index) / BATCH_SIZE * 50,
-            validation_data=get_data(content, valid_index, BATCH_SIZE, strict=True),
-            validation_steps=len(valid_index) / BATCH_SIZE,
-            nb_epoch=1)
-
-        print("Saving model.h5-epoch-%s..." % (e + 1))
-        model.save("model.h5-epoch-%s" % (e + 1))
+    model.save("model.h5")
 
 
 
