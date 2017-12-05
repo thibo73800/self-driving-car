@@ -47,7 +47,7 @@ python model.py
 
 #### 1. An appropriate model architecture has been employed
 
-I train the model using a convolutional neural network predicting one linear output. As I said above, the architecture is built in the buld_method (model.py) method.
+I train the model using a convolutional neural network predicting one linear output. As I said above, the architecture is built in the build_method (model.py) method.
 
 #### 2. Attempts to reduce overfitting in the model
 
