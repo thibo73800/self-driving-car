@@ -68,12 +68,14 @@ def get_data(log_content, index_list, batch_size, strict=True):
             # Randomly select one of of three images
             i = random.choice([0, 1, 2]) # [Center, Left, Right]
             img = cv2.imread(os.path.join(DATA_IMG, log_content[index][i]).replace(" ", ""))
+
             if img is None: continue
 
+            img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
             # Get the rotation
             rotation = float(log_content[index][3])
 
-            #if not strict and random.random() > np.sqrt(rotation ** 2) > 0.1:
+            #if not strict and random.random() > np.sqrt(rotation ** 2) + 0.1:
             #    continue
 
             # Apply correction
@@ -109,14 +111,15 @@ def main():
 
     BATCH_SIZE = 64
 
-    model.fit_generator(
-        generator=get_data(content, train_index, BATCH_SIZE, strict=False),
-        steps_per_epoch=len(train_index) / BATCH_SIZE * 50,
-        validation_data=get_data(content, valid_index, BATCH_SIZE, strict=True),
-        validation_steps=len(valid_index) / BATCH_SIZE,
-        nb_epoch=12)
+    for e in range(10000):
+        model.fit_generator(
+            generator=get_data(content, train_index, BATCH_SIZE, strict=False),
+            steps_per_epoch=len(train_index) / BATCH_SIZE * 50,
+            validation_data=get_data(content, valid_index, BATCH_SIZE, strict=True),
+            validation_steps=len(valid_index) / BATCH_SIZE,
+            nb_epoch=1)
 
-    model.save("model.h5")
+        model.save("model.h5-%s"%e)
 
 
 
