@@ -457,23 +457,35 @@ class LineDetector(object):
 
         return ploty, left_fitx, right_fitx, out_img
 
-    def detect_curvature(self, ploty, left_fitx, right_fitx):
+    def detect_curvature(self, ploty, left_fitx, right_fitx, img_width):
         """
-            Method used to detect the angle of each line
+            Method used to detect the curvature of each line
         """
-        ## ROTATION
         # Define conversions in x and y from pixels space to meters
         ym_per_pix = 30/720 # meters per pixel in y dimension
         xm_per_pix = 3.7/700 # meters per pixel in x dimension
         y_eval = np.max(ploty)
         left_fit_cr = np.polyfit(ploty*ym_per_pix, left_fitx*xm_per_pix, 2)
         right_fit_cr = np.polyfit(ploty*ym_per_pix, right_fitx*xm_per_pix, 2)
-        # Calculate the new radii of curvature
+        # Calculate the new radius of curvature
         left_curverad = ((1 + (2*left_fit_cr[0]*y_eval*ym_per_pix + left_fit_cr[1])**2)**1.5) / np.absolute(2*left_fit_cr[0])
         right_curverad = ((1 + (2*right_fit_cr[0]*y_eval*ym_per_pix + right_fit_cr[1])**2)**1.5) / np.absolute(2*right_fit_cr[0])
         # Final curvature
         curvature = (left_curverad + right_curverad) / 2
+
         return curvature
+
+    def detect_car_position(self, left_fitx, right_fitx, img_width):
+        """
+            Method used to detect the car position on the road
+        """
+        xm_per_pix = 3.7/700 # meters per pixel in x dimension
+        # Get the center of the road between two lines (center = left + ((right - left) / 2))
+        center = left_fitx[-1] + ((right_fitx[-1] - left_fitx[-1]) // 2)
+        # We assume the camera is at the center of the car
+        camera_position = img_width // 2
+        car_position = (camera_position - center) * xm_per_pix
+        return car_position
 
     def draw_lines(self, binary_warped, img, ploty, left_fitx, right_fitx, Minv):
         """
@@ -495,27 +507,14 @@ class LineDetector(object):
 
         return result
 
-    def draw_additional_informations(self, result, curvature, binary, _binary, _color):
+    def draw_additional_informations(self, result, curvature, car_position):
         """
             Draw additional informations on the final image
         """
-        cv2.putText(result, "Curvature: %2.fm" % (curvature), (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2, cv2.LINE_AA)
-
-        n_win = cv2.resize(binary, (200, 100), interpolation = cv2.INTER_CUBIC)
-        n_win = np.dstack((n_win, n_win, n_win)) * 255
-        result[10:110,1020:1220,:] = n_win
-        cv2.putText(result, "binary", (1020, 130), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2, cv2.LINE_AA)
-
-        n_win = cv2.resize(_binary, (200, 100), interpolation = cv2.INTER_CUBIC)
-        n_win = np.dstack((n_win, n_win, n_win)) * 255
-        result[10:110,810:1010,:] = n_win
-        cv2.putText(result, "threshold", (810, 130), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2, cv2.LINE_AA)
-
-        n_win = cv2.resize(_color, (200, 100), interpolation = cv2.INTER_CUBIC)
-        n_win = np.dstack((n_win, n_win, n_win)) * 255
-        result[10:110,600:800,:] = n_win
-        cv2.putText(result, "colors", (600, 130), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2, cv2.LINE_AA)
-
+        side = "left" if car_position < 0 else "right"
+        car_position = abs(car_position)
+        cv2.putText(result, "Curvature: %.2fm" % (curvature), (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2, cv2.LINE_AA)
+        cv2.putText(result, "Car is: %.2fm %s of center" % (car_position, side), (10, 80), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2, cv2.LINE_AA)
         return result
 
 
@@ -538,11 +537,13 @@ class LineDetector(object):
             # Step 5: Detect lines
             ploty, left_fitx, right_fitx, out_img = self.detect_lines(
                 original_image, binary_warped, plot=plot, plot_final=plot_final)
-            # Step 6: Detect angles
-            curvature = self.detect_curvature(ploty, left_fitx, right_fitx)
-            # Step 7: Draw lines
+            # Step 6: Detect angles and car position
+            curvature = self.detect_curvature(ploty, left_fitx, right_fitx, original_image.shape[1])
+            # Step 7: Detect car position
+            car_position = self.detect_car_position(left_fitx, right_fitx, original_image.shape[1])
+            # Step 8: Draw lines
             result = self.draw_lines(binary_warped, img, ploty, left_fitx, right_fitx, Minv)
-            result = self.draw_additional_informations(result, curvature, binary, _binary, _color)
+            result = self.draw_additional_informations(result, curvature, car_position)
             # Plot the final image
             if plot_final: plot_image(result)
         except Exception as e:
@@ -565,34 +566,10 @@ def main(input_video_path):
     output_clip = clip.fl_image(line.process_image)
     output_clip.write_videofile("output2.mp4", audio=False)
 
-    plot = False
-    plot_final = True
-
-    # for i in range(950, 1080):
-    # for i in range(636, 1080):
-    #     print("sample_images/img_%s.jpg" % i)
-    #     img = cv2.imread("sample_images/img_%s.jpg" % i)
-    #     line.process_image(img, plot=plot, plot_final=plot_final)
-
+    #plot = False
+    #plot_final = True
     #img = cv2.imread("sample_images/img_580.jpg")
     #line.process_image(img, plot=plot, plot_final=plot_final)
-    # img = cv2.imread("sample_images/img_580.jpg")
-    # line.process_image(img, plot=plot, plot_final=plot_final)
-    # img = cv2.imread("sample_images/img_890.jpg")
-    # line.process_image(img, plot=plot, plot_final=plot_final)
-    # img = cv2.imread("sample_images/img_620.jpg")
-    # line.process_image(img, plot=plot, plot_final=plot_final)
-    # # Slightly go to the left
-    # img = cv2.imread("sample_images/img_539.jpg")
-    # line.process_image(img, plot=plot, plot_final=plot_final)
-    # img = cv2.imread("sample_images/img_614.jpg")
-    # line.process_image(img, plot=plot, plot_final=plot_final)
-    # img = cv2.imread("sample_images/img_985.jpg")
-    # line.process_image(img, plot=plot, plot_final=plot_final)
-    # img = cv2.imread("sample_images/img_965.jpg")
-    # line.process_image(img, plot=plot, plot_final=plot_final)
-    # img = cv2.imread("sample_images/img_992.jpg")
-    # line.process_image(img, plot=plot, plot_final=plot_final)
 
     return
 
