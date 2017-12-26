@@ -93,6 +93,8 @@ To compute the transformation, I first compute the transition Matrix M (and Minv
 
 #### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
+The lines detection pipeline is implemented in the detect_lines function (main.py) using a sliding window. The pipeline is implemented in 4 different part:
+
 Part 1: Starting position
 
 The idea is to create a little window which slides along the image from the bottom to the top. To define the starting point of each window (left and right), We can compute the histogram along the x-axis and identify one peak on both sides.
