@@ -67,7 +67,7 @@ The images below give some examples of the filters.
 
 #### 3. Perspective transform
 
-The perspective transform is written into the function: perspective_transform (main.py). I used the following mapping:
+The perspective transform is written into the function: perspective_transform (main.py line 234). I used the following mapping:
 
 This resulted in the following source and destination points:
 
@@ -86,7 +86,7 @@ To compute the transformation, I first compute the transition Matrix M (and Minv
 
 #### 4. Lane-line
 
-The lines detection pipeline is implemented in the detect_lines function (main.py) using a sliding window. The pipeline is implemented in 4 different part:
+The lines detection pipeline is implemented in the detect_lines function (main.py line 338) using a sliding window. The pipeline is implemented in 4 different part:
 
 <b>Part 1: Starting position</b>
 
@@ -146,7 +146,7 @@ car_position = (camera_position - center) * xm_per_pix
 
 #### 6. Final result
 
-The function which Implement almost all the steps of the project is...
+The method which summarize almost all the steps of the project is <br>process_image</b> in main.py at line 532.
 
 <img src="output_images/final_result.png" />
 
