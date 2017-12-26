@@ -126,7 +126,7 @@ rx = np.array(self.right_fit_cr)[:,2].mean()
 <img src="output_images/lines_detection.png" />
 
 
-#### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
+#### 5. Radius of curvature of the lane and position of the vehicle with respect to center.
 
 The function to measure the curvature of the line is in the method: detect_curvature (main.py) while the vehicle position is computed in the method: detect_car_position.
 
@@ -144,7 +144,7 @@ To get the position of the car, I make the difference between the two detected l
 car_position = (camera_position - center) * xm_per_pix
 ```
 
-#### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
+#### 6. Final result
 
 The function which Implement almost all the steps of the project is...
 
@@ -154,15 +154,11 @@ The function which Implement almost all the steps of the project is...
 
 ### Pipeline (video)
 
-#### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
-
 Here's a [link to my video result](https://github.com/thibo73800/self-driving-car/blob/master/p4-advanced-lane-lines/output.mp4)
 
 ---
 
 ### Discussion
-
-#### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
 To make this pipeline works well on the project video, I combined many filters. This is why there are many hyperparameters to tunes to get a well suited binary image. The current filters work well on the project video. However, to support more generic videos, I guess I should pass more time to create a better representation. I worked a lot on lines detection to find the solution describe above. I think this one is robust enough for simple roads. For trickiest roads, I would change the lines detection pipeline to keep track of more pieces of information, try different combinations of possible lines and picking the one which is more likely to be the right solution given the current image and previous images.
 
