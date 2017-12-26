@@ -573,14 +573,14 @@ def main(input_video_path):
     """
     line = LineDetector()
 
-    #clip = VideoFileClip(input_video_path)
-    #output_clip = clip.fl_image(line.process_image)
-    #output_clip.write_videofile("output2.mp4", audio=False)
+    clip = VideoFileClip(input_video_path)
+    output_clip = clip.fl_image(line.process_image)
+    output_clip.write_videofile("output2.mp4", audio=False)
 
-    plot = True
-    plot_final = True
-    img = cv2.imread("sample_images/img_280.jpg")
-    line.process_image(img, plot=plot, plot_final=plot_final)
+    #plot = True
+    #plot_final = True
+    #img = cv2.imread("sample_images/img_280.jpg")
+    #line.process_image(img, plot=plot, plot_final=plot_final)
 
     return
 
