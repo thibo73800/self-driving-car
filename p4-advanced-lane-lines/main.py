@@ -195,7 +195,7 @@ def color_gradient_threshold(image, plot=False):
         ax1.imshow(image)
         ax1.set_title('Original Image', fontsize=50)
         ax2.imshow(combined, cmap='gray')
-        ax2.set_title('Combined', fontsize=50)
+        ax2.set_title('Gradient filter', fontsize=50)
         plt.subplots_adjust(left=0., right=1, top=0.9, bottom=0.)
         plt.show()
 
@@ -225,13 +225,13 @@ def color_gradient_threshold(image, plot=False):
         ax1.imshow(image)
         ax1.set_title('Original Image', fontsize=50)
         ax2.imshow(color_grad_binary, cmap='gray')
-        ax2.set_title('Color + Gradient', fontsize=50)
+        ax2.set_title('Colors + Gradient', fontsize=50)
         plt.subplots_adjust(left=0., right=1, top=0.9, bottom=0.)
         plt.show()
 
     return color_grad_binary, combined, colors
 
-def perspective_transform(binary):
+def perspective_transform(binary, plot=False):
     """
         Apply perspective transform on the image
         **input:
@@ -255,6 +255,17 @@ def perspective_transform(binary):
 
     # Warped the binary image using the Transformation matrix
     binary_warped = cv2.warpPerspective(binary, M, img_size, flags=cv2.INTER_LINEAR)
+
+    if plot:
+        # Plot the result
+        f, (ax1, ax2) = plt.subplots(1, 2, figsize=(24, 9))
+        f.tight_layout()
+        ax1.imshow(binary, cmap="gray")
+        ax1.set_title('Original binary', fontsize=50)
+        ax2.imshow(binary_warped, cmap='gray')
+        ax2.set_title("Binary warped", fontsize=50)
+        plt.subplots_adjust(left=0., right=1, top=0.9, bottom=0.)
+        plt.show()
 
     return binary_warped, Minv
 
@@ -533,7 +544,7 @@ class LineDetector(object):
             # STEP 3: Color and gradient threshold
             binary, _binary, _color = color_gradient_threshold(img, plot=plot)
             # STEP 4: PERSPECTIVE TRANSFORM
-            binary_warped, Minv = perspective_transform(binary)
+            binary_warped, Minv = perspective_transform(binary, plot)
             # Step 5: Detect lines
             ploty, left_fitx, right_fitx, out_img = self.detect_lines(
                 original_image, binary_warped, plot=plot, plot_final=plot_final)
@@ -562,14 +573,14 @@ def main(input_video_path):
     """
     line = LineDetector()
 
-    clip = VideoFileClip(input_video_path)
-    output_clip = clip.fl_image(line.process_image)
-    output_clip.write_videofile("output2.mp4", audio=False)
+    #clip = VideoFileClip(input_video_path)
+    #output_clip = clip.fl_image(line.process_image)
+    #output_clip.write_videofile("output2.mp4", audio=False)
 
-    #plot = False
-    #plot_final = True
-    #img = cv2.imread("sample_images/img_580.jpg")
-    #line.process_image(img, plot=plot, plot_final=plot_final)
+    plot = True
+    plot_final = True
+    img = cv2.imread("sample_images/img_280.jpg")
+    line.process_image(img, plot=plot, plot_final=plot_final)
 
     return
 
