@@ -107,7 +107,7 @@ At each iteration, all nonzero points in the window area are stored into a list.
 <b>Part 3: Slides windows</b>
 To move the line, I compute from my current position the mean x value of all non zero pixels in my area. Then I can move my window to the top using the x mean as my next position along the x-axis. For each window position, I memorize the window position for future use. Each peak corresponds to the starting position of one window. Sometimes, it is possible to define a position where no pixels take place, in this case, I take a look to the current history to set the position according to the history of the previous line. Or, if the current line is drawn enough, I try to predict the x position given the difference between the current window position and the starting window position. This approximation gives me roughly the current line slope to predict a position consistent with the current line.
 
-<b>Part 4: Create the line formula<b/>
+<b>Part 4: Create the line formula</b>
 Knowing that all points where the window passed through are stored in a list. We can use the numpy.polyfit function to create a quadratic function.
 
 ```python
