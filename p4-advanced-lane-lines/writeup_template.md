@@ -74,7 +74,7 @@ The images below give some examples of the filters.
 
 #### 3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
 
-The perspective transform is written into the function: perspective_transform (main.py). I used the following mapping:
+The perspective transform is written into the function: perspective_transform (main.py line 234). I used the following mapping:
 
 This resulted in the following source and destination points:
 
@@ -93,7 +93,7 @@ To compute the transformation, I first compute the transition Matrix M (and Minv
 
 #### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
-The lines detection pipeline is implemented in the detect_lines function (main.py) using a sliding window. The pipeline is implemented in 4 different part:
+The lines detection pipeline is implemented in the detect_lines function (main.py line 338) using a sliding window. The pipeline is implemented in 4 different part:
 
 Part 1: Starting position
 
@@ -153,7 +153,7 @@ car_position = (camera_position - center) * xm_per_pix
 
 #### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
-The function which Implement almost all the steps of the project is...
+The method which summarize almost all the steps of the project is <br>process_image</b> in main.py at line 532.
 
 <img src="output_images/final_result.png" />
 
