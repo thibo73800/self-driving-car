@@ -95,19 +95,19 @@ To compute the transformation, I first compute the transition Matrix M (and Minv
 
 The lines detection pipeline is implemented in the detect_lines function (main.py line 338) using a sliding window. The pipeline is implemented in 4 different part:
 
-Part 1: Starting position
+<b>Part 1: Starting position<b/>
 
 The idea is to create a little window which slides along the image from the bottom to the top. To define the starting point of each window (left and right), We can compute the histogram along the x-axis and identify one peak on both sides.
 
 <img src="output_images/histogram.png" />
 
-Part2: Gather points
+<b>Part2: Gather points<b/>
 At each iteration, all nonzero points in the window area are stored into a list. If there are not nonzero points in the area, I manually add some points in this area to better fit the line formula later.
 
-Part 3: Slides windows
+<b>Part 3: Slides windows<b/>
 To move the line, I compute from my current position the mean x value of all non zero pixels in my area. Then I can move my window to the top using the x mean as my next position along the x-axis. For each window position, I memorize the window position for future use. Each peak corresponds to the starting position of one window. Sometimes, it is possible to define a position where no pixels take place, in this case, I take a look to the current history to set the position according to the history of the previous line. Or, if the current line is drawn enough, I try to predict the x position given the difference between the current window position and the starting window position. This approximation gives me roughly the current line slope to predict a position consistent with the current line.
 
-Part 4: Create the line formula
+<b>Part 4: Create the line formula<b/>
 Knowing that all points where the window passed through are stored in a list. We can use the numpy.polyfit function to create a quadratic function.
 
 ```python
