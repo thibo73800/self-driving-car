@@ -29,13 +29,15 @@ The real 3D images points are stored in a list: objpoints. These points are the 
 
 Once 3D points and 2D points have been computed for all images, I use cv2.calibrateCamera to compute the distortion coefficients and the camera matrix. Then, I can use these two variables to undistorted any image taken with this camera by calling cv2.undistort.
 
-IMAGE CHESSBOARD!
+<img src="output_images/distortion_corrected_calibration_image.png" />
 
 ### Pipeline (single images)
 
 #### 1. Provide an example of a distortion-corrected image.
 
-IMAGE
+The distortion correction is made at line 543 in main.py file.
+
+<img src="output_images/distortion_corrected_image.png" />
 
 #### 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
 
@@ -51,21 +53,28 @@ combined = np.zeros_like(dir_binary)
 combined[((gradx == 1) & (grady == 1)) | (((mag_binary == 1) & (dir_binary == 1)))] = 1
 ```
 
+<img src="output_images/gradient_filter.png" />
+
 On the other side, I convert the image to HSL color space to create a new binary image based on the S and H channel (colors). I do not always use the H channel depending on the input image.
 
-Then, I create another binary image based on the RGB colors (yw_binary). Finally, the results of the previous binary image are combined together.
+Then, I create another binary image based on the RGB colors (yw_binary). 
+
+Finally, the results of the previous binary image are combined together.
 
 ```python
 color_grad_binary[(colors == 1) & (combined == 1) & (yw_binary == 1)] = 1
 ```
-
 The images below give some examples of the filters.
 
-IMAGES OF FILTERS
+
+<img src="output_images/color_h.png" />
+<img src="output_images/color_s.png" />
+<img src="output_images/yellow_white_filter.png.png" />
+<img src="output_images/colors_gradient.png" />
 
 #### 3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
 
-The perspective transform is written into the function: perspective_transform (main.py). I used the following mapping:
+The perspective transform is written into the function: perspective_transform (main.py line 234). I used the following mapping:
 
 This resulted in the following source and destination points:
 
@@ -78,21 +87,27 @@ This resulted in the following source and destination points:
 
 To compute the transformation, I first compute the transition Matrix M (and Minv) mapping sources point to destinations points using the following function: cv2.getPerspectiveTransform. Then, using the M matrix, I warp the binary image with the following function: cv2.warpPerspective.
 
+
+<img src="output_images/binary_warped.png" />
+
+
 #### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
-Part 1: Starting position
+The lines detection pipeline is implemented in the detect_lines function (main.py line 338) using a sliding window. The pipeline is implemented in 4 different part:
+
+<b>Part 1: Starting position</b>
 
 The idea is to create a little window which slides along the image from the bottom to the top. To define the starting point of each window (left and right), We can compute the histogram along the x-axis and identify one peak on both sides.
 
-IMAGE!!!
+<img src="output_images/histogram.png" />
 
-Part2: Gather points
+<b>Part2: Gather points</b>
 At each iteration, all nonzero points in the window area are stored into a list. If there are not nonzero points in the area, I manually add some points in this area to better fit the line formula later.
 
-Part 3: Slides windows
+<b>Part 3: Slides windows</b>
 To move the line, I compute from my current position the mean x value of all non zero pixels in my area. Then I can move my window to the top using the x mean as my next position along the x-axis. For each window position, I memorize the window position for future use. Each peak corresponds to the starting position of one window. Sometimes, it is possible to define a position where no pixels take place, in this case, I take a look to the current history to set the position according to the history of the previous line. Or, if the current line is drawn enough, I try to predict the x position given the difference between the current window position and the starting window position. This approximation gives me roughly the current line slope to predict a position consistent with the current line.
 
-Part 4: Create the line formula
+<b>Part 4: Create the line formula</b>
 Knowing that all points where the window passed through are stored in a list. We can use the numpy.polyfit function to create a quadratic function.
 
 ```python
@@ -115,17 +130,20 @@ rx1 = np.array(self.right_fit_cr)[:,1].mean()
 rx = np.array(self.right_fit_cr)[:,2].mean()
 ```
 
+<img src="output_images/lines_detection.png" />
+
+
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
 The function to measure the curvature of the line is in the method: detect_curvature (main.py) while the vehicle position is computed in the method: detect_car_position.
 
 The radius of curvature is compute using the following formula:
 
-IMAGE FORMULA
+<img src="output_images/formula_curvature.png" />
 
 Where:
 
-FORMULA Image
+<img src="output_images/formula_curvature_2.png" />
 
 To get the position of the car, I make the difference between the two detected lines to get the center of the road, then I subtract the middle of the road to the center of the image (the camera is mounted at the center of the car). Finally, I multiply the result to go from pixel to meters. A negative result means the car is on the left of the road center while a positive result mean the car is on the right.
 
@@ -135,9 +153,9 @@ car_position = (camera_position - center) * xm_per_pix
 
 #### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
-The function which Implement almost all the steps of the project is...
+The method which summarize almost all the steps of the project is <br>process_image</b> in main.py at line 532.
 
-IMAGE FINAL RESULT
+<img src="output_images/final_result.png" />
 
 ---
 
@@ -145,7 +163,7 @@ IMAGE FINAL RESULT
 
 #### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
 
-Here's a [link to my video result](./project_video.mp4)
+Here's a [link to my video result](https://github.com/thibo73800/self-driving-car/blob/master/p4-advanced-lane-lines/output.mp4)
 
 ---
 
