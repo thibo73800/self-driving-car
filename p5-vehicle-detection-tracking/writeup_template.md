@@ -24,11 +24,11 @@ The goals / steps of this project are the following:
 
 #### 1. Explain how (and identify where in your code) you extracted HOG features from the training images.
 
-My classifier is based on HOG features. HOG features are based on the gradient magnitude and direction at each pixel. Then, the image is divided in small cells. Thus, we can compute a an histogram of direction for each cell of the image. This method gives the possibility to detect the signature of an object’s shape easily. Instead of extract HOG features manually, I used the method hog from skimage.feature. This method takes mainly three important parameters: orientations, pixels_per_cell and cells_per_block. To choose the best combinations of theses values, I first plot some random pair of images with associated HOG features as bellow.
+My classifier is based on HOG features. HOG features are based on the gradient magnitude and direction at each pixel. Then, the image is divided into small cells. Thus, we can compute a histogram of direction for each cell of the image. This method gives the possibility to detect the signature of an object’s shape easily. Instead of extract HOG features manually, I used the method hog from skimage.feature. This method takes mainly three important parameters: orientations, pixels_per_cell and cells_per_block. To choose the best combinations of these values, I first plotted some random pair of images with their associated HOG features as bellow.
 
 IMAGE WITH BOTH IMG/HOG
 
-Then, Once I was happy with my current combination of parameters I tried to train the model. I finally change HOG parameters in order to improve the accuracy on the test test. In finally come up with the following values: orient: 2, pixels_per_cell: 16, orient: 2.
+Then, once I was happy with some combination of parameters I tried to train the model by changing HOG parameters each time in order to improve the accuracy of the test set. I finally come up with the following values: orient: 2, pixels_per_cell: 16, orient: 2.
 
 The code for this step is contained in the file image.py in the static method get_hog_features.
 
@@ -36,9 +36,9 @@ The code for this step is contained in the file image.py in the static method ge
 
 For this project, I trained the model using a SVC model. SVC is part of the sklearn.svm library. SVC allows two interesting things, first I can use the kernel trick to classify binary data. Then, I can get the result of the prediction as a probability for both classes (car, non-car).I will explain further in this document why this is useful.
 
-To train the classifier, I change the color space of each image from RGB to HLS. Then I compute HOG features for each image. Before to train the classifier, I normalize the features using  the StandardScaler method from sclera.preprocessing.
+To train the classifier, I change the color space of each image from RGB to HLS. Then I compute HOG features for each image. Before to train the classifier, I normalize the features using the StandardScaler method from sclera.preprocessing.
 
-I train the SVC using normalised HOG features and “rbf” for the kernel trick. To come up with this choice, I tested all possible kernel by comparing each one against others, but it turns out that the best one is rbf.
+I train the SVC using normalized HOG features and “rbf” for the kernel trick. To come up with this choice, I tested all possible kernel by comparing each one against others, but it turns out that the best one is rbf.
 
 Lines in the code ….
 
@@ -46,9 +46,9 @@ Lines in the code ….
 
 #### 1. Describe how (and identify where in your code) you implemented a sliding window search.  How did you decide what scales to search and how much to overlap windows?
 
-The sliding windows search method is used to search for cars accros different subregions of the images. To accelerate the processing of each image, I choose to extract HOG features only once per scale (I use 6 different scale). I reduced the area of interest: from 320px to 656px for the y axis.
+The sliding windows search method is used to search for cars across different subregions of the images. To accelerate the processing of each image, I choose to extract HOG features only once per scale (I use 6 different scale). I reduced the area of interest: from 320px to 656px for the y-axis.
 
-The first time the script is launch I search for a car across all the x axis. Then I will search only new cars on the left and right side of the image. Indeed, it is unlikely to see a new car appear at the center of the image, so we don’t need to search new cars at the center. However, I am also looking for around the last positions where I previously detect cars. Thus, I am able to track a car accros a serie of image, even if the car is going to the center of the image.
+The first time the script is launch I search for a car across all the x-axis. Then I will search only new cars on the left and right side of the image. Indeed, it is unlikely to see a new car appear at the center of the image, so we don’t need to search new cars at the center. However, I am also looking for cars around the last positions where I previously detect some. Thus, I am able to track a car across a series of images, even if the car is going to the center of the image.
 
 #### 2. Show some examples of test images to demonstrate how your pipeline is working.  What did you do to optimize the performance of your classifier?
 
