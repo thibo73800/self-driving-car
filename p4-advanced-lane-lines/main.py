@@ -20,6 +20,8 @@ from IPython.display import HTML
 # Use to handle the HELP doc
 from docopt import docopt
 
+
+
 # Import methods used to detect lines
 from detector_function import *
 
