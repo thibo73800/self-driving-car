@@ -16,12 +16,12 @@ class Image(object):
     """
 
     #  HOG parameters
-    ORIENT = 11
+    ORIENT = 10
     PIX_PER_CELL = 16
     CELL_PER_BLOCK = 2
 
-    # Color space (HLS)
-    COLOR_SPACE = cv2.COLOR_RGB2HLS
+    # Color space (YUV) HLS
+    #COLOR_SPACE = cv2.COLOR_RGB2HSV
 
     # Images size
     ## 64 was the orginal sampling rate, with 8 cells and 8 pix per cell
@@ -41,7 +41,7 @@ class Image(object):
             features = hog(img, orientations=Image.ORIENT, pixels_per_cell=(Image.PIX_PER_CELL, Image.PIX_PER_CELL),
                            cells_per_block=(Image.CELL_PER_BLOCK, Image.CELL_PER_BLOCK), transform_sqrt=transform_sqrt,
                            visualise=False, feature_vector=feature_vec)
-            return features, None
+            return features
 
     def __init__(self, img, scale, ystart, ystop, rescale=True):
         """
@@ -53,9 +53,11 @@ class Image(object):
         self.scale = scale
         self.tosearch = img[ystart:ystop,:,:]
         # Set the color space
-        self.tosearch = cv2.cvtColor(self.tosearch, self.COLOR_SPACE)
         if rescale:
             self.tosearch = self.tosearch.astype(np.float32)/255
+        #self.tosearch = cv2.cvtColor(self.tosearch, self.COLOR_SPACE)
+        #print(self.tosearch.mean())
+        #self.tosearch = cv2.cvtColor(self.tosearch, cv2.COLOR_BGR2YUV)
         # Resize image if necesary
         if scale != 1:
             imshape = self.tosearch.shape
@@ -72,6 +74,6 @@ class Image(object):
         self.nxsteps = (nxblocks - self.nblocks_per_window) // self.cells_per_step + 1
         self.nysteps = (nyblocks - self.nblocks_per_window) // self.cells_per_step + 1
         # Compute individual channel HOG features for the entire image
-        self.hog1, _ = Image.get_hog_features(self.ch1)
-        self.hog2, _ = Image.get_hog_features(self.ch2)
-        self.hog3, _ = Image.get_hog_features(self.ch3)
+        self.hog1 = Image.get_hog_features(self.ch1)
+        self.hog2 = Image.get_hog_features(self.ch2)
+        self.hog3 = Image.get_hog_features(self.ch3)

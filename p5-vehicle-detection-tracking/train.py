@@ -82,17 +82,23 @@ def extract_features(img_path, image=None):
         image = mpimg.imread(img_path)
     image = cv2.resize(image, size)
     # Change color space
-    feature_image = cv2.cvtColor(image, Image.COLOR_SPACE)
+    #feature_image = cv2.cvtColor(image, Image.COLOR_SPACE)
     # HOG features
-    hog_features_1, _ = Image.get_hog_features(image[:,:,0])
-    hog_features_2, _ = Image.get_hog_features(image[:,:,1])
-    hog_features_3, _ = Image.get_hog_features(image[:,:,2])
+    hog_features_1 = Image.get_hog_features(image[:,:,0])
+    hog_features_2 = Image.get_hog_features(image[:,:,1])
+    hog_features_3 = Image.get_hog_features(image[:,:,2])
+
+    #plot_image(image)
+    _, hog_visu = Image.get_hog_features(cv2.cvtColor(image, cv2.COLOR_RGB2GRAY), vis=True)
+    #plot_image(hog_visu, cmap="gray")
+
     # Flatten features for each channel
     hog_features_1 = hog_features_1.ravel()
     hog_features_2 = hog_features_2.ravel()
     hog_features_3 = hog_features_3.ravel()
     # Concat features from each channel together
     hog_features = np.hstack((hog_features_1, hog_features_2, hog_features_3))
+    #print("hog_features.shape", hog_features.shape)
     return hog_features
 
 def train_dataset(features, targets):
@@ -135,7 +141,7 @@ def create_dataset():
     np.save("features", features)
     np.save("targets", ntargets)
     targets = ntargets
-    return featuresn, targets
+    return features, targets
 
 if __name__ == '__main__':
     if not os.path.isfile("features.npy"):
@@ -143,3 +149,4 @@ if __name__ == '__main__':
     else:
         features = np.load("features.npy")
         targets = np.load("targets.npy")
+    train_dataset(features, targets)
