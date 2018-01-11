@@ -44,19 +44,19 @@ The project is split into 5 python file.
 
 #### 1. Explain how (and identify where in your code) you extracted HOG features from the training images.
 
-My classifier use HOG features. HOG features are based on the gradient magnitude and direction at each pixel. Then, the image is divided into small cells. Thus, we can compute a histogram of direction for each cell of the image. This method gives the possibility to detect the signature of an object’s shape easily. Instead of extract HOG features manually, I used the method hog from skimage.feature. This method takes mainly three important parameters: orientations, pixels_per_cell and cells_per_block. To choose the best combinations of these values, I first plotted some images with their associated HOG features as bellow.
+My classifier use HOG features. HOG features are based on the gradient magnitude and direction at each pixel. Then, the image is divided into small cells. Thus, we can compute a histogram of direction for each cell of the image. This method gives the possibility to detect the signature of an object’s shape easily. Instead of extract HOG features manually, I used the method hog from skimage.feature. This method takes three important parameters: orientations, pixels_per_cell and cells_per_block. To choose the best combinations of these values, I first plotted some images with their associated HOG features as bellow.
 
 <img src="img/hog_exemple.png" />
 
 Then, once I was happy with what's the plotted HOG image looked like I tried to train the model by changing HOG parameters each time in order to improve the accuracy of the test set. I finally come up with the following values: orient: 10, pixels_per_cell: 16, orient: 2.
 
-The code for this step is contained in the file image.py in the static method get_hog_features. I chose to use a simple RGB color space because it turns out that this is the space with the less number of False positive when I launch a test on the project video.
+The code for this step is contained in the file <b>image.py</b> in the static method <b>get_hog_features</b>. I chose to use a simple RGB color space because it turns out that this is the space with the less number of False positive when I launch a test on the project video.
 
 #### 2. Describe how (and identify where in your code) you trained a classifier using your selected HOG features (and color features if you used them).
 
 For this project, I trained the model using a SVC model. SVC is part of the sklearn.svm library. SVC allows two interesting things, first I can use the kernel trick to classify binary data. Then, I can get the result of the prediction as a probability for both classes (car, non-car).I will explain further in this document why this is useful.
 
-To train the classifier I compute HOG features for each image. Before to train the classifier, I normalize the features using the StandardScaler method from sclera.preprocessing.
+To train the classifier I compute HOG features for each image. Before to train the classifier, I normalize the features using the StandardScaler method from sklearn.preprocessing.
 
 I train the SVC using normalized HOG features and “rbf” for the kernel trick. To come up with this choice, I tested all possible kernel by comparing each one against others, but it turns out that the best one is rbf. Finally, I achieve 99% accuracy on the test set.
 
@@ -66,21 +66,21 @@ The training part of the project is located in the file train.py. The creation o
 
 #### 1. Describe how (and identify where in your code) you implemented a sliding window search.  How did you decide what scales to search and how much to overlap windows?
 
-The sliding windows search method is used to search for cars across different subregions of the images. To accelerate the processing of each image, I choose to extract HOG features only once per scale (I use 6 different scale). I reduced the area of interest: from 320px to 656px for the y-axis.
+The sliding windows search method is used to search for cars across different subregions of the images. To accelerate the processing of each image, I choose to extract HOG features only once per scale (I use 6 different scales). I reduced the area of interest: from 320px to 656px for the y-axis.
 
-The first time the script is launch I search for a car across all the x-axis. Then I will search only new cars on the left and right side of the image. Indeed, it is unlikely to see a new car appear at the center of the image, so we don’t need to search new cars at the center. However, I am also looking anyway for cars around the last positions where I previously detect some. Thus, I am able to track a car across a series of images, even if the car is in the center of the image.
+The first time the script is launch I search for a vehicles across all the x-axis. Then I will search only new cars on the left and right side of the image. Indeed, it is unlikely to see a new car appear at the center of the image, so we don’t need to search new cars at the center. However, I am also looking anyway for cars around the last positions where I previously detect some. Thus, I am able to track a car across a series of images, even if the car is in the center of the image.
 
 The sliding window search is implemented in the file process.py in the method: <b>detect_new_cars</b>
 
 #### 2. Show some examples of test images to demonstrate how your pipeline is working.  What did you do to optimize the performance of your classifier?
 
-As I just said, I started by searching cars across all the x-axis and a sub part of the y-axis as images bellow (multiple scale):
+As I just said, I started by searching cars across all the x-axis and a subpart of the y-axis as the images below  show (multiple scales):
 
 <img src="img/first_shot.png" />
 <img src="img/first_shot_s2.png" />
 <img src="img/first_shot_s3.png" />
 
-This first passed all over the road gives a first snapshot of possible cars position. Basicly, at this level of the pipeline the mainly thing I do to optimize the performance of my classifier is to get the probability of the classifiation (probability from 0 to 1) at eatch window insted of simply take the class prediction (O or 1). This little change allow me to get a heatmap with different detected windows as follow:
+This first passed all over the road gives a first snapshot of possible cars position. Basically, at this level of the pipeline, the main thing I do to optimize the performance of my classifier is to get the probability of the classification (probability from 0 to 1) at each window instead of simply take the class prediction (O or 1). This little change allows me to get a heatmap with different detected windows as follow:
 
 <img src="img/heat-map.png" />
 
@@ -89,7 +89,7 @@ Then, I will filter this heat-map with a strong threshold in order to be sure to
 <img src="img/heat-map2.png" />
 <img src="img/detected_car.png" />
 
-Thus, I can now look only on the left and right side of the image to search for new cars. But I will also look around the position of the previous detected car as the image bellow show (Once again with differents scale):
+Thus, I can now look only on the left and right side of the image to search for new cars. But I will also look around the position of the previous detected car as the image bellow show (Once again with different scale):
 
 <img src="img/second_shot.png" />
 <img src="img/second_shot_2.png" />
