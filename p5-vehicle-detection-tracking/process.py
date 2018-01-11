@@ -130,7 +130,7 @@ class CarsDetection(object):
             # Define a bounding box based on min/max x and y
             bbox = [[np.min(nonzerox), np.min(nonzeroy)], [np.max(nonzerox), np.max(nonzeroy)]]
             # Draw the box on the image
-            #cv2.rectangle(img, (bbox[0][0], bbox[0][1]), (bbox[1][0], bbox[1][1]), (0,240,0),6)
+            cv2.rectangle(img, (bbox[0][0], bbox[0][1]), (bbox[1][0], bbox[1][1]), (0,240,0),6)
             final_clusters.append(bbox)
 
         return final_clusters, img
@@ -179,12 +179,12 @@ class CarsDetection(object):
         for car in self.cars:
             car.add_activity(False) # By default the car is not detected
         # Copy original image
-        draw_img = np.copy(img)
+
         # Lists to store detected boxes and detections confident (probability)
         boxes = []
         boxes_confident = []
+        draw_img = np.copy(img)
         for s, scale in enumerate(self.SCALES):
-            draw_img = np.copy(img)
             for xb in range(images[s].nxsteps):
                 x_progress = xb / images[s].nxsteps
                 for yb in range(images[s].nysteps):
@@ -206,12 +206,7 @@ class CarsDetection(object):
                         n_box, center = self._create_new_box(images[s], xb, yb)
                         boxes.append(n_box)
                         boxes_confident.append(py[1])
-                        cv2.rectangle(draw_img, (n_box[0][0], n_box[0][1]), (n_box[1][0], n_box[1][1]), (100,0,55),6)
-                    else:
-                        n_box, center = self._create_new_box(images[s], xb, yb)
-                        cv2.rectangle(draw_img, (n_box[0][0], n_box[0][1]), (n_box[1][0], n_box[1][1]), (0,0,0),6)
-            #if show:
-            #plot_image(draw_img)
+
         clusters, img = self.get_heatmap(np.copy(img), draw_img.shape, boxes, boxes_confident, show=show)
 
         for cluster in clusters:
@@ -248,6 +243,11 @@ class CarsDetection(object):
         """
             Define a single function that can extract features using hog sub-sampling and make predictions
         """
+        global global_i
+        if global_i < 600:
+            global_i += 1
+            return img
+        global_i += 1
         images = [Image(img, scale, self.YSTART, self.YSTOP, rescale=rescale) for scale in self.SCALES]
         img = self.detect_new_cars(img, images, show=show)
         self.first = False
@@ -264,7 +264,7 @@ def main(input_video_path):
 
     clip = VideoFileClip(input_video_path)
     output_clip = clip.fl_image(cars_detection.find_cars)
-    output_clip.write_videofile("output_challenge.mp4", audio=False)
+    output_clip.write_videofile("output_tmp.mp4", audio=False)
 
 
 

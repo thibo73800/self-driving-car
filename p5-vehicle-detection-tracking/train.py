@@ -87,11 +87,6 @@ def extract_features(img_path, image=None):
     hog_features_1 = Image.get_hog_features(image[:,:,0])
     hog_features_2 = Image.get_hog_features(image[:,:,1])
     hog_features_3 = Image.get_hog_features(image[:,:,2])
-
-    #plot_image(image)
-    _, hog_visu = Image.get_hog_features(cv2.cvtColor(image, cv2.COLOR_RGB2GRAY), vis=True)
-    #plot_image(hog_visu, cmap="gray")
-
     # Flatten features for each channel
     hog_features_1 = hog_features_1.ravel()
     hog_features_2 = hog_features_2.ravel()
