@@ -133,6 +133,8 @@ class CarsDetection(object):
             cv2.rectangle(img, (bbox[0][0], bbox[0][1]), (bbox[1][0], bbox[1][1]), (0,240,0),6)
             final_clusters.append(bbox)
 
+        plot_image(img)
+
         return final_clusters, img
 
     def _get_hog_features(self, image, xb, yb):
