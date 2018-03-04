@@ -7,16 +7,8 @@ This project involves the Term 2 Simulator which can be downloaded [here](https:
 
 This repository includes two files that can be used to set up and install [uWebSocketIO](https://github.com/uWebSockets/uWebSockets) for either Linux or Mac systems. For windows you can use either Docker, VMware, or even [Windows 10 Bash on Ubuntu](https://www.howtogeek.com/249966/how-to-install-and-use-the-linux-bash-shell-on-windows-10/) to install uWebSocketIO. 
 
-Once the install for uWebSocketIO is complete, the main program can be built and run by doing the following from the project top directory.
+Once the install for uWebSocketIO is complete, the main program can be built and run (See the: "Basic Build Instructions" section).
 
-1. mkdir build
-2. cd build
-3. cmake ..
-4. make
-5. ./ExtendedKF
-
-
-Here is the main protcol that main.cpp uses for uWebSocketIO in communicating with the simulator.
 
 ---
 
