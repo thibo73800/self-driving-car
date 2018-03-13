@@ -32,11 +32,14 @@ public:
   MatrixXd Xsig_pred_;
 
   MatrixXd Zsig_;
+  MatrixXd Zsig_laser_;
 
-  // predicted z in cartesian space
+  // predicted z in polar space
   VectorXd z_pred_;
+  VectorXd z_pred_laser_;
   //innovation covariance matrix S
   MatrixXd S_;
+  MatrixXd S_laser_;
 
   ///* time when the state is true, in us
   long long time_us_;
@@ -96,6 +99,10 @@ public:
   MatrixXd  SigmaPointPrediction(const MatrixXd &Xsig_aug, double dt);
   void      PredictMeanAndCovariance(MatrixXd Xsig_pred);
   void      PredictRadarMeasurement();
+  void      PredictLaserMeasurement();
+  void      logNisValue(double nis, const std::string &file_name);
+  void      logValue(double val1, double val2, const std::string &file_name);
+  void      emptyLogFiles();
 
   /**
    * Prediction Predicts sigma points, the state, and the state covariance
