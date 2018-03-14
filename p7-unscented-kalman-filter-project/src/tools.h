@@ -20,6 +20,11 @@ class Tools {
         static VectorXd CartToPolar(const VectorXd &state);
         // Translate polar coordinate to cartesian coordinate
         static VectorXd PolarToCart(const VectorXd &state);
+
+        // Usefull method to log the result of this algorithm
+        static void logNisValue(double nis, const std::string &file_name);
+        static void logValue(double val1, double val2, const std::string &file_name);
+        static void emptyLogFiles();
 };
 
 #endif /* _TOOLS_H_ */

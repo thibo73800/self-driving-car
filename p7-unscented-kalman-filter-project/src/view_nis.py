@@ -7,7 +7,8 @@ import sys
 
 if __name__ == '__main__':
 
-    df = sys.argv[2];
+    distributions = [0, 3.841, 5.991, 7.815, 9.48, 11.07]
+    df = int(sys.argv[2]);
 
     with open(sys.argv[1], "r") as f:
         nis_values = f.read()
@@ -15,11 +16,12 @@ if __name__ == '__main__':
 
         out_percentage = 0;
         for value in nis_values:
-            if value > 7.815:
+            if value > distributions[df]:
                 out_percentage += 1
         print("Percentage of above value:", out_percentage / len(nis_values))
 
+        plt.title(sys.argv[1])
         plt.plot([x for x in range(len(nis_values))], nis_values, "orange", label="NIS value")
-        plt.plot([x for x in range(len(nis_values))], [7.815 for x in range(len(nis_values))], 'blue', label='NIS Threshold')
+        plt.plot([x for x in range(len(nis_values))], [distributions[df] for x in range(len(nis_values))], 'blue', label='NIS Threshold')
         plt.legend()
         plt.show()

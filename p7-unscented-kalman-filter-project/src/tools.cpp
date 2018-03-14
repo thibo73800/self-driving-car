@@ -1,5 +1,8 @@
 #include "tools.h"
 #include <cmath>
+#include <fstream>
+#include <iostream>
+#include <sstream>
 #include <iostream>
 
 using namespace std;
@@ -80,4 +83,49 @@ VectorXd Tools::PolarToCart(const VectorXd &state) {
 
     cart << px, py, 0.0, 0.0, 0.0;
     return cart;
+}
+
+void Tools::emptyLogFiles(){
+    ofstream myfile;
+
+    myfile.open("radar_nis.log"); myfile << ""; myfile.close();
+    myfile.open("radar_p.log"); myfile << ""; myfile.close();
+    myfile.open("radar_rho.log"); myfile << ""; myfile.close();
+    myfile.open("radar_p_dot.log"); myfile << ""; myfile.close();
+
+    myfile.open("laser_nis.log"); myfile << ""; myfile.close();
+    myfile.open("laser_px.log"); myfile << ""; myfile.close();
+    myfile.open("laser_py.log"); myfile << ""; myfile.close();
+}
+
+void Tools::logNisValue(double nis, const std::string &file_name){
+    std::ofstream out;
+    out.open(file_name, std::ios::app);
+
+    std::ostringstream strs;
+    strs << nis;
+    std::string str = strs.str();
+
+    out << str;
+    out << ",";
+    out.close();
+}
+
+void Tools::logValue(double val1, double val2, const std::string &file_name){
+    std::ofstream out;
+    out.open(file_name, std::ios::app);
+
+    std::ostringstream strs1;
+    strs1 << val1;
+    std::string str1 = strs1.str();
+
+    std::ostringstream strs2;
+    strs2 << val2;
+    std::string str2 = strs2.str();
+
+    out << str1;
+    out << ";";
+    out << str2;
+    out << ",";
+    out.close();
 }
