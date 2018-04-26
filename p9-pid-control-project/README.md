@@ -21,7 +21,7 @@ In this project, I used the following constant values:
  <li>Kd: 2.0</li>
 </ul>
 
-I come up with these values by tweaking the parameters by hand, starting with a very slow throttle: 0.1. By doing so, it was easy to find good parameters. I then begin to increase the throttle to 0.2 to find better parameters. I quickly realized that it would be difficult to find efficient parameters working regardless the speed of the car. This is why I have created the other factor relative to the current speed of the car:
+I come up with these values by tweaking the parameters by hand, starting with a very slow throttle: 0.1. By doing so, it was easy to find good parameters. I then begin to increase the throttle to 0.2 to find better parameters. I quickly realized that it would be difficult to find efficient parameters working regardless the speed of the car. This is why I have created an other factor relative to the current speed of the car:
 
 <img src="img/s.png"/>
 
