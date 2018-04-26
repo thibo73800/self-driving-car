@@ -28,7 +28,7 @@ I come up with these values by tweaking the parameters by hand, starting with a 
 where k is a constant >= 1.
 Finally the final steering angle is the following 
 
-<img src="steering/s.png"/>
+<img src="img/steering.png"/>
 
 ## Dependencies
 
