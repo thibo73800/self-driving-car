@@ -3,8 +3,32 @@ Self-Driving Car Engineer Nanodegree Program
 
 ---
 
-In this project, I implemented a PID control.
+In this project, I implemented a PID control to reduce the error between the position of the car and the center of the road. In this project, the error is given by the environment. PID stands for Proportional Integral Derivative. Each of these terms refers to a constant value Kp, Ki, and Kd.
 
+The proportional factor changes the error in proportion to the current Error. 
+
+In the Integral path, the error is summed up at each iteration, then the error is reduced in proportion to the sum of past error. This factor is used to remove continuous errors in the control system. It does not matter how large the constant error is, by summing the error values we can reach a value large enough to reduce the error anyway.
+
+For the derivative factor, this is the rate of change that contributes to the change. When the change in error is moving slowly, then the derivative path is small, when the difference is large, the derivative is large too.
+
+By summing these three change, we end up with the final correction.
+
+In this project, I used the following constant values:
+
+<ul>
+ <li>Kp: 0.3</li>
+ <li>Ki: 0.0001</li>
+ <li>Kd: 2.0</li>
+</ul>
+
+I come up with these values by tweaking the parameters by hand, starting with a very slow throttle: 0.1. By doing so, it was easy to find good parameters. I then begin to increase the throttle to 0.2 to find better parameters. I quickly realized that it would be difficult to find efficient parameters working regardless the speed of the car. This is why I have created the other factor relative to the current speed of the car:
+
+<img src="img/s.png"/>
+
+where k is a constant >= 1.
+Finally the final steering angle is the following 
+
+<img src="steering/s.png"/>
 
 ## Dependencies
 
