@@ -23,6 +23,7 @@ void PID::Init(double Kp, double Ki, double Kd) {
     this->int_cte = 0;
 
     this->throttle = 0.5;
+}
 
 double PID::getNextSteeringAngle(double cte, double speed){
     /*
