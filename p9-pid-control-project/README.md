@@ -30,6 +30,8 @@ Finally the final steering angle is the following
 
 <img src="img/steering.png"/>
 
+A video of the car can be watch on <a href="https://youtu.be/rNLS6Bz2svs">this video</a>.
+
 ## Dependencies
 
 * cmake >= 3.5
