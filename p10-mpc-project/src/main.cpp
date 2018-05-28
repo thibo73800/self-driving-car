@@ -99,7 +99,7 @@ int main() {
 
           steering_angle = steering_angle*(-1);
 
-          double dt = 0.08;
+          double dt = 0.1;
 
           // Convert waypoints to the vehicle coordinate system
           auto vehicle_waypoints = mpc.WaypointsToVehiclesPoints(ptsx, ptsy, px, py, psi);
