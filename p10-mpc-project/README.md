@@ -56,6 +56,7 @@ The next part of the project combined the reference trajectory and the dynamic m
  <li>The gap between sequential actuations</li>
 <ul>
  
+ 
  ```[c++]
  
     // The part of the cost based on the reference state.
@@ -70,6 +71,7 @@ The next part of the project combined the reference trajectory and the dynamic m
       fg[0] += 700000 * (this->speed+1) * CppAD::pow(vars[delta_start + t + 1] - vars[delta_start + t], 2);
     }
  ```
+
 
 Since everything is differentiable we can at each iteration optimize the model to reduce the error. Then, the first inputs control are returned by the method (<b>MPC::Solve</b>).
 
