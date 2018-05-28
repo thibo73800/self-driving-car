@@ -74,7 +74,7 @@ The error is then compute using four factors:
     }
  ```
 
-The predicted horizon depends of N (timestep length) and dt (elapsed duration between timesteps). A too short horizond do not allow to predict enough informations (especially for tight curves) to change the inputs control properly. However, a too large horizon is inneficient and tends to produce unxpected behavior in some situations. After some trial and error, I finally comes up with N = 15 and dt = 0.08.
+The predicted horizon depends on N (timestep length) and dt (elapsed duration between timesteps). A too short horizon do not allow to predict enough information (especially for tight curves) to change the inputs control properly. However, a too large horizon is inefficient and tends to produce unexpected behavior in some situations. After some trial and error, I finally come up with N = 15 and dt = 0.08.
 
 Since everything is differentiable we can at each iteration optimize the model to reduce the error. Then, the first inputs control are returned by the method (<b>MPC::Solve</b>).
 
