@@ -46,9 +46,11 @@ The project uses a model predictive control (MPC) to predict the next vehicle in
 
 <img src="img/formulas.png" />
 
-A self-driving car is made of multiples part such that the localization, the mapping, and the control. In this project, we assume the localization and the mapping are done. Thus, the simulator comes up with a set of waypoints. The first step is to convert each waypoint from the world to the vehicle coordinate system. Then, we can use this set of points to fit a polynomial function is used as the trajectory to follow (in yellow on the video). See: <b>MPC::WaypointsToVehiclesPoints</b> and <b>MPC::kinematicModel</b>.
+A self-driving car is made of multiples part such that the localization, the mapping, and the control. In this project, we assume the localization and the mapping are done. Thus, the simulator comes up with a set of waypoints. The first step is to convert each waypoint from the world to the vehicle coordinate system. Then, we can use this set of points to fit a polynomial function as the trajectory to follow (in yellow on the video). See: <b>MPC::WaypointsToVehiclesPoints</b> and <b>MPC::kinematicModel</b>.
 
-The next part of the project combined the reference trajectory and the dynamic model. Using the ipopt library we can set the behavior of the model and optimize it which respect to the throttle and the steering angle. The error depends on four factors:
+The next part of the project combined the reference trajectory and the dynamic model. Using the ipopt library we can set the behavior of the model and optimize it which respect to the throttle and the steering angle. The futur is predict assuming 100 millisecond of latency: This is the time the command propagates through the system.
+
+The error is then compute using four factors:
 <ul>
  <li>The cross track</li>
  <li>The orientation error</li>
@@ -72,6 +74,7 @@ The next part of the project combined the reference trajectory and the dynamic m
     }
  ```
 
+The predicted horizon depends of N (timestep length) and dt (elapsed duration between timesteps). A too short horizond do not allow to predict enough informations (especially for tight curves) to change the inputs control properly. However, a too large horizon is inneficient and tends to produce unxpected behavior in some situations. After some trial and error, I finally comes up with N = 15 and dt = 0.08.
 
 Since everything is differentiable we can at each iteration optimize the model to reduce the error. Then, the first inputs control are returned by the method (<b>MPC::Solve</b>).
 
