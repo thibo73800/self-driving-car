@@ -43,7 +43,6 @@ class FG_eval {
   typedef CPPAD_TESTVECTOR(AD<double>) ADvector;
   void operator()(ADvector& fg, const ADvector& vars) {
     // `fg` a vector of the cost constraints, `vars` is a vector of variable values (state & actuators)
-    AD<double> ref_v = 100;
     AD<double> lf = Lf;
     fg[0] = 0;
 
@@ -51,7 +50,7 @@ class FG_eval {
     for (int t = 0; t < N; t++) {
       fg[0] += 20000*CppAD::pow(vars[cte_start + t], 2);
       fg[0] += 200000*CppAD::pow(vars[epsi_start + t], 2);
-      fg[0] += CppAD::pow(vars[v_start + t] - ref_v, 2);
+      fg[0] += CppAD::pow(vars[v_start + t] - 100, 2);
     }
 
     // Minimize the value gap between sequential actuations.
