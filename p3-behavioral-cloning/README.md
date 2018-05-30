@@ -1,22 +1,45 @@
 # Behaviorial Cloning Project
 
-[![Udacity - Self-Driving Car NanoDegree](https://s3.amazonaws.com/udacity-sdc/github/shield-carnd.svg)](http://www.udacity.com/drive)
-
 ---
 
 This repository contains starting files for the Behavioral Cloning Project from Udacity.
 
-My project includes the following files:
+The project includes the following files:
 * model.py containing the script to create and train the model
 * drive.py for driving the car in autonomous mode
-* model.h5 containing a trained convolution neural network
 * writeup_report.md or writeup_report.pdf summarizing the results
+
+## Setup the project:
+
+### Download the simulator:
+<ul>
+    <li><a href="https://d17h27t6h515a5.cloudfront.net/topher/2017/February/58ae46bb_linux-sim/linux-sim.zip">Linux</a></li>
+    <li><a href="https://d17h27t6h515a5.cloudfront.net/topher/2017/February/58ae4594_mac-sim.app/mac-sim.app.zip">macOS</a></li>
+    <li><a href="https://d17h27t6h515a5.cloudfront.net/topher/2017/February/58ae4419_windows-sim/windows-sim.zip">Windows</a></li>
+</ul>
+
+### Download the dataset:
+
+<a href="https://d17h27t6h515a5.cloudfront.net/topher/2016/December/584f6edd_data/data.zip">Download</a>
+unzip the file at the root of the repository!!
+
+### Install dependencies:
+
+```sh
+python3 -m virtualenv --python=python3 venv
+. venv/bin/activate
+pip install -r requirements.txt
+```
+
+### Train the model
+
+```sh
+python model.py
+```
 
 #### Test the model
 
-1) <b>!! Download the pre-trained model:</b> https://jumpshare.com/v/7lnxpaJDY0IU9BVAyZCv
-
-2) To test the model, you first need to launch the python script drive.py. This one will create a socket server used to send steering angle predictions.
+To test the model, you first need to launch the python script drive.py. This one will create a socket server used to send steering angle predictions.
 
 Using the Udacity provided simulator and the drive.py file, the car can be driven autonomously around the track by executing:
 
