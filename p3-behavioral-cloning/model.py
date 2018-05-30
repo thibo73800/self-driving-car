@@ -7,16 +7,15 @@ import os
 import numpy as np
 import random
 from random import shuffle
-import matplotlib.pyplot as plt
-from keras.models import Model
-from keras import optimizers
-import matplotlib.pyplot as plt
+
 from sklearn.model_selection import train_test_split
-from keras.models import Sequential
-from keras.layers import merge, Conv2D, MaxPooling2D, Input, Dense, Flatten, Cropping2D, Lambda, Dropout, ELU
+
+from tensorflow.python.keras.models import Model
+from tensorflow.python.keras.models import Sequential
+from tensorflow.python.keras.layers import Conv2D, Dense, Flatten, Cropping2D, Lambda, Dropout
 
 DATA_PATH = "data/driving_log.csv"
-DATA_IMG = "data/"
+DATA_IMG = "data/IMG/"
 
 def build_model():
     """
@@ -25,9 +24,9 @@ def build_model():
     model = Sequential()
     model.add(Lambda(lambda x: (x / 127.5) - 1., input_shape = (160, 320, 3)))
     model.add(Cropping2D(cropping=((70, 25), (0, 0)), input_shape = (160, 320, 3)))
-    model.add(Conv2D(8, 9, strides=(4, 4), border_mode="same", activation="elu"))
-    model.add(Conv2D(16, 5, strides=(2, 2), border_mode="same", activation="elu"))
-    model.add(Conv2D(32, 4, strides=(1, 1), border_mode="same", activation="elu"))
+    model.add(Conv2D(8, 9, strides=(4, 4), padding="same", activation="elu"))
+    model.add(Conv2D(16, 5, strides=(2, 2), padding="same", activation="elu"))
+    model.add(Conv2D(32, 4, strides=(1, 1), padding="same", activation="elu"))
     model.add(Flatten())
     model.add(Dropout(.6))
     model.add(Dense(1024, activation="elu"))
@@ -38,17 +37,6 @@ def build_model():
     model.compile(loss="mse", optimizer="adam")
 
     return model
-
-def plot_image(img):
-    """
-        Plot image
-        **input:
-            *img: Image to plot
-    """
-    bc, gc, rc = cv2.split(img)
-    frame_rgb = cv2.merge((rc,gc,bc))
-    plt.imshow(frame_rgb)
-    plt.show()
 
 def get_data(log_content, index_list, batch_size, strict=True):
     """
@@ -116,7 +104,7 @@ def main():
         steps_per_epoch=len(train_index) / BATCH_SIZE * 50,
         validation_data=get_data(content, valid_index, BATCH_SIZE, strict=True),
         validation_steps=len(valid_index) / BATCH_SIZE,
-        nb_epoch=10)
+        epochs=10)
 
     model.save("model.h5")
 
