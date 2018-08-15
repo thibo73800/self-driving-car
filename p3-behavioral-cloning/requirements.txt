@@ -6,3 +6,4 @@ opencv-python
 sklearn
 jupyter
 scipy
+flask-socketio

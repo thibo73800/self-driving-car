@@ -15,7 +15,7 @@ from tensorflow.python.keras.models import Sequential
 from tensorflow.python.keras.layers import Conv2D, Dense, Flatten, Cropping2D, Lambda, Dropout
 
 DATA_PATH = "data/driving_log.csv"
-DATA_IMG = "data/IMG/"
+DATA_IMG = "data/"
 
 def build_model():
     """
@@ -101,10 +101,10 @@ def main():
 
     model.fit_generator(
         generator=get_data(content, train_index, BATCH_SIZE, strict=False),
-        steps_per_epoch=len(train_index) / BATCH_SIZE * 50,
+        steps_per_epoch=len(train_index) / BATCH_SIZE,
         validation_data=get_data(content, valid_index, BATCH_SIZE, strict=True),
         validation_steps=len(valid_index) / BATCH_SIZE,
-        epochs=10)
+        epochs=12)
 
     model.save("model.h5")
 
