@@ -80,8 +80,7 @@ The ptsx and ptsy points above have been generate accordint to the s frenete coo
 ## The car is able to change lanes
 
 Because the algorithm smooth the number of points between two waypoints path, changing line is automatically smooth.
-The algorithm check which lane is the fastest, check if it is possible to change the lane by calling the isLineFree method, It 
-it is, the target lane is changed and new waypoints are generated toward the new lane.
+The algorithm check which lane is the fastest, check if it is possible to change the lane by calling the isLineFree method, If it is, the target lane is changed and new waypoints are generated toward the new lane.
 
 https://github.com/thibo73800/self-driving-car/blob/master/p11-path-planning-project/src/path_planner.cpp#L241
 
