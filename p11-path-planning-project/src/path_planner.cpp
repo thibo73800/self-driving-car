@@ -84,8 +84,11 @@ double PathPlanner::getLaneSpeed(double lane, const car_s &car, lidar &sensor_fu
 	return lane_speed;
 }
 
+
+/*
+    Check if the line is free
+*/
 bool PathPlanner::isLineFree(double lane, const car_s &car, lidar &sensor_fusion){
-    // find ref_v to use
 
 	double lane_speed = -1;
 
@@ -218,8 +221,10 @@ generatedpath_s PathPlanner::generateTrajectory(const path_s &previous_path, con
 	    return n_path;
 }
 
+/*
+    Check the three lines to detect which one is free and the fastest.
+*/
 generatedpath_s PathPlanner::checkPath(const path_s &previous_path, const car_s &car, const state_e &state, lidar &sensor_fusion){
-	// get speed ref
     std::cout << "--------" << '\n';
 
 	double lane = this->lane;
@@ -243,10 +248,12 @@ generatedpath_s PathPlanner::checkPath(const path_s &previous_path, const car_s 
         }
     }
 
+    // Set the target lane
     std::cout << "Target lane: " <<  this->target_lane << '\n';
     double line_change = std::fmax(-1.0, std::fmin(this->target_lane - this->lane, 1.0));
     this->lane =  this->lane + (0.05*line_change);
 
+    // Speed of the target lane
     lane_speed = getLaneSpeed(this->lane, car, sensor_fusion);
 
     if (this->velocity >= lane_speed && lane_speed != -1){
@@ -261,6 +268,7 @@ generatedpath_s PathPlanner::checkPath(const path_s &previous_path, const car_s 
     std::cout << "Lane:" << this->lane << '\n';
     std::cout << "Current speed: " << this->velocity << '\n';
 
+    // Generated the new path according to the target lane and target speed
 	generatedpath_s new_path = generateTrajectory(previous_path, car, state, sensor_fusion, false, this->lane);
 
     return new_path;
