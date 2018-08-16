@@ -39,7 +39,7 @@ PathPlanner::PathPlanner(){
 
     this->velocity = 0;
     this->max_velocity = 49.5;
-    this->safe_dist = 20;
+    this->safe_dist = 30;
     this->lane = 1;
     this->target_lane = 1;
 };
@@ -258,7 +258,7 @@ generatedpath_s PathPlanner::checkPath(const path_s &previous_path, const car_s 
 
     if (this->velocity >= lane_speed && lane_speed != -1){
         std::cout << "Keep the car speed: " << lane_speed << '\n';
-        this->velocity = std::fmax(this->velocity - 1, lane_speed);
+        this->velocity = std::fmax(this->velocity - 0.224, lane_speed);
     }
     else {
         std::cout << "Go to max velocity: " << this->max_velocity << '\n';
